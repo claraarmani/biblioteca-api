@@ -1,0 +1,113 @@
+{
+  "info": {
+    "_postman_id": "40bc9b88-e17c-4586-abfa-c14a78579cb8",
+    "name": "Projeto API - Loja de Roupas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52903286"
+  },
+  "item": [
+    {
+      "name": "01 - Criar empréstimo",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nomeLivro\": \"Dom Casmurro\",\r\n    \"leitorId\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/emprestimos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "emprestimos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "02 - Listar todos os empréstimos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "03 - Buscar empréstimo por ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/emprestimos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "emprestimos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "04 - Testar ID inválido",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "05 — PUT: Atualizar empréstimo.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "06 - Excluir empréstimo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "07 - Testar cadastro inválido",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}
