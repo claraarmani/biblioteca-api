@@ -1,19 +1,76 @@
+
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import { TextField } from '@/components/forms/text-field'
 import { cn } from '@/src/lib/utils'
 
 type Mode = 'entrar' | 'registro'
 
-// Visual-only forms: submission will be wired to the existing backend auth routes once provided.
 export function AuthForms({ initialMode }: { initialMode: Mode }) {
   const [mode, setMode] = useState<Mode>(initialMode)
   const [notice, setNotice] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setNotice('Interface pronta. O envio será conectado às rotas de autenticação do backend.')
+    setNotice(null)
+    setLoading(true)
+
+    const formData = new FormData(event.currentTarget)
+
+    const email = String(formData.get('email') || '')
+    const senha = String(formData.get('password') || '')
+
+    const dados = mode === 'registro'
+      ? {
+          nome: String(formData.get('firstName') || ''),
+          sobrenome: String(formData.get('lastName') || ''),
+          email,
+          senha,
+        }
+      : { email, senha }
+
+    try {
+      const resposta = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/${
+          mode === 'registro' ? 'usuarios' : 'login'
+        }`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dados),
+        },
+      )
+
+      const resultado = await resposta.json()
+
+      if (!resposta.ok) {
+        throw new Error(resultado.erro || 'Não foi possível realizar a operação.')
+      }
+
+      if (mode === 'registro') {
+        setNotice('Cadastro realizado com sucesso! Agora faça seu login.')
+        setMode('entrar')
+        event.currentTarget.reset()
+      } else {
+        localStorage.setItem('token', resultado.token)
+        router.push('/conta')
+        router.refresh()
+      }
+    } catch (error) {
+      setNotice(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao conectar com o servidor.',
+      )
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -46,7 +103,9 @@ export function AuthForms({ initialMode }: { initialMode: Mode }) {
             <TextField label="Sobrenome" name="lastName" autoComplete="family-name" required />
           </div>
         )}
+
         <TextField label="E-mail" name="email" type="email" autoComplete="email" required />
+
         <TextField
           label="Senha"
           name="password"
@@ -55,23 +114,32 @@ export function AuthForms({ initialMode }: { initialMode: Mode }) {
           minLength={8}
           required
         />
+
         {mode === 'registro' && (
           <label className="flex items-start gap-3 text-xs leading-relaxed text-muted-foreground">
             <input type="checkbox" name="newsletter" className="mt-0.5 size-4 accent-foreground" />
             Quero receber novidades, lançamentos e ofertas exclusivas por e-mail.
           </label>
         )}
+
         {mode === 'entrar' && (
           <button type="button" className="self-start text-[11px] uppercase tracking-[0.14em] underline underline-offset-4">
             Esqueci minha senha
           </button>
         )}
+
         <button
           type="submit"
-          className="h-12 bg-foreground text-xs font-semibold uppercase tracking-[0.18em] text-background hover:opacity-85"
+          disabled={loading}
+          className="h-12 bg-foreground text-xs font-semibold uppercase tracking-[0.18em] text-background hover:opacity-85 disabled:opacity-50"
         >
-          {mode === 'entrar' ? 'Entrar' : 'Criar conta'}
+          {loading
+            ? 'Aguarde...'
+            : mode === 'entrar'
+              ? 'Entrar'
+              : 'Criar conta'}
         </button>
+
         {notice && (
           <p role="status" className="border border-border p-3 text-xs text-muted-foreground">
             {notice}
