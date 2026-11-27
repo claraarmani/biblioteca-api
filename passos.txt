@@ -1,8 +1,8 @@
 create database biblioteca
 
 criar .env {
-DATABASE_URL=postgresql://postgres:aluno@localhost:5432/biblioteca
-JWT_SECRET=8F8Z0aY3m2btgsGl9uANuSzbs6sMJdBMTJkL6UdfnuMRq7hVUAkHmWsrt6WIx3vdKWpi9uYIfdBTKTEYLLnoNA
+DATABASE_URL=postgresql://postgres:[SENHA]@localhost:5432/biblioteca
+JWT_SECRET=https://jwtsecretkeygenerator.com/
 PORT=3000
 CORS_ORIGIN=http://localhost:3001
 }
