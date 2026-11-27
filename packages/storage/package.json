@@ -1,0 +1,20 @@
+{
+  "name": "@bibapi/storage",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.js",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.0.0"
+  },
+  "scripts": {
+    "generate": "node --env-file-if-exists=../../.env ../../node_modules/prisma/build/index.js generate",
+    "migrate-dev": "node --env-file-if-exists=../../.env ../../node_modules/prisma/build/index.js migrate dev",
+    "migrate-reset": "node --env-file-if-exists=../../.env ../../node_modules/prisma/build/index.js migrate reset",
+    "studio": "node --env-file-if-exists=../../.env ../../node_modules/prisma/build/index.js studio",
+    "seed": "node --env-file-if-exists=../../.env ../../node_modules/prisma/build/index.js db seed"
+  }
+}

@@ -7,107 +7,124 @@
   },
   "item": [
     {
-      "name": "01 - Criar empréstimo",
+      "name": "Cadastrar leitor",
       "request": {
         "method": "POST",
-        "header": [],
+        "url": "{{baseUrl}}/leitores",
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"nomeLivro\": \"Dom Casmurro\",\r\n    \"leitorId\": 1\r\n}",
+          "raw": "{\"nome\":\"Leitor\",\"email\":\"{{$randomEmail}}\",\"turma\":\"1A\"}",
           "options": {
             "raw": {
               "language": "json"
             }
           }
-        },
-        "url": {
-          "raw": "http://localhost:3000/emprestimos",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "3000",
-          "path": [
-            "emprestimos"
-          ]
         }
       },
-      "response": []
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Cadastro concluído', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('leitorId', pm.response.json().id);"
+            ]
+          }
+        }
+      ]
     },
     {
-      "name": "02 - Listar todos os empréstimos",
+      "name": "Criar empréstimo",
       "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
+        "method": "POST",
+        "url": "{{baseUrl}}/emprestimos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nomeLivro\":\"Dom Casmurro\",\"leitorId\":{{leitorId}}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
       },
-      "response": []
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Cadastro concluído', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('emprestimoId', pm.response.json().id);"
+            ]
+          }
+        }
+      ]
     },
     {
-      "name": "03 - Buscar empréstimo por ID",
+      "name": "Listar empréstimos",
       "request": {
         "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/emprestimos/1",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "3000",
-          "path": [
-            "emprestimos",
-            "1"
-          ]
-        }
-      },
-      "response": []
+        "url": "{{baseUrl}}/emprestimos"
+      }
     },
     {
-      "name": "04 - Testar ID inválido",
+      "name": "Buscar empréstimo",
       "request": {
         "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
-        }
-      },
-      "response": []
+        "url": "{{baseUrl}}/emprestimos/{{emprestimoId}}"
+      }
     },
     {
-      "name": "05 — PUT: Atualizar empréstimo.",
+      "name": "Testar ID inválido",
       "request": {
         "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
-        }
-      },
-      "response": []
+        "url": "{{baseUrl}}/emprestimos/abc"
+      }
     },
     {
-      "name": "06 - Excluir empréstimo",
+      "name": "Atualizar empréstimo",
       "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
+        "method": "PUT",
+        "url": "{{baseUrl}}/emprestimos/{{emprestimoId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"dataDevolucao\":\"2026-12-01\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
-      },
-      "response": []
+      }
     },
     {
-      "name": "07 - Testar cadastro inválido",
+      "name": "Excluir empréstimo",
       "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
+        "method": "DELETE",
+        "url": "{{baseUrl}}/emprestimos/{{emprestimoId}}"
+      }
+    },
+    {
+      "name": "Testar cadastro inválido",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/emprestimos",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         }
-      },
-      "response": []
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
     }
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "name": "biblioteca-api",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n \"WEB,API\" -c \"cyan,green\" \"npm run dev -w @bibapi/server\" \"npm run dev -w @bibapi/client\"",
+    "server-dev": "npm run dev -w @bibapi/server",
+    "back-dev": "npm run server-dev",
+    "front-dev": "npm run client-dev",
+    "start": "npm run start -w @bibapi/server",
+    "generate": "npm run generate -w @bibapi/storage",
+    "migrate-dev": "npm run migrate-dev -w @bibapi/storage",
+    "migrate-reset": "npm run migrate-reset -w @bibapi/storage",
+    "studio": "npm run studio -w @bibapi/storage",
+    "client-dev": "npm run dev -w @bibapi/client -- --port 3001",
+    "build": "npm run build -w @bibapi/client",
+    "seed": "npm run seed -w @bibapi/storage"
+  },
+  "overrides": {
+    "effect": "3.22.1"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}
