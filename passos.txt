@@ -1,0 +1,14 @@
+create database biblioteca
+
+criar .env {
+DATABASE_URL=postgresql://postgres:aluno@localhost:5432/biblioteca
+JWT_SECRET=8F8Z0aY3m2btgsGl9uANuSzbs6sMJdBMTJkL6UdfnuMRq7hVUAkHmWsrt6WIx3vdKWpi9uYIfdBTKTEYLLnoNA
+PORT=3000
+CORS_ORIGIN=http://localhost:3001
+}
+
+npm run migrate-reset
+npm run migrate-dev
+npm run generate
+npm run seed
+npm run dev
